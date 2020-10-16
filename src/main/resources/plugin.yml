@@ -1,0 +1,10 @@
+name: ShopGUIEditor
+version: ${project.version}
+main: tk.doorfail.firstplugin.ShopGUIEditor
+load: STARTUP
+authors: [Doorfail]
+description: First learning plugin for spigot
+commands:
+  shopedit:
+    description: opens the editor for shopGUI shop.yml
+    aliases: [shopeditor, shopguieditor, shopguiedit, se]
