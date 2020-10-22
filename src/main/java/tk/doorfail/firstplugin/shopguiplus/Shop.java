@@ -1,6 +1,7 @@
 package tk.doorfail.firstplugin.shopguiplus;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemStack;
 import tk.doorfail.firstplugin.ShopGUIEditor;
 import tk.doorfail.firstplugin.gui.ShopEditorGui;
@@ -19,6 +20,14 @@ public class Shop{
     public Shop() {}
     public Shop(String _displayName) {
         name = _displayName;
+    }
+
+    public Shop(MemorySection values) {
+        name = (String)values.get("name");
+        ((MemorySection)values.get("items")).getValues(false).forEach((key,value) ->{
+            if(((MemorySection)value).get("type").equals("item"))
+                this.items.add(new ShopItem((MemorySection)value));
+        });
     }
 
     public int getInventorySize(){
@@ -52,7 +61,7 @@ public class Shop{
         HashMap<String, Object> map = new HashMap<>();
         map.put("name",name);
         map.put("size",getInventorySize());
-        ShopGUIEditor.getPlugin(ShopGUIEditor.class).getLogger().info("Slot Max: "+getInventorySize()+", Count: "+items.size());
+        //ShopGUIEditor.getPlugin(ShopGUIEditor.class).getLogger().info("Slot Max: "+getInventorySize()+", Count: "+items.size());
         map.put("fillItem",getFillItem(Material.SPRUCE_DOOR));//filler item, need to change
         map.put("buttons",getButtons());
 
@@ -66,7 +75,7 @@ public class Shop{
         itemMap.put(items.size()+16,getSpecialBalance());
         map.put("items",(Map<Integer,Object>)itemMap);
         //ShopGUIEditor.getPlugin(ShopGUIEditor.class).getLogger().info("Item Map #"+itemMap.size()+": "+itemMap.get(itemMap.size()-1).toString());
-        ShopGUIEditor.getPlugin(ShopGUIEditor.class).getLogger().finest("Map: "+map.get("items").toString());
+        //ShopGUIEditor.getPlugin(ShopGUIEditor.class).getLogger().finest("Map: "+map.get("items").toString());
 
         return map;
     }

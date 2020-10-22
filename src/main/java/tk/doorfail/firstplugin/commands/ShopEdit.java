@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import tk.doorfail.firstplugin.ShopGUIEditor;
 import tk.doorfail.firstplugin.gui.MainShopGui;
 import tk.doorfail.firstplugin.shopguiplus.Shops;
@@ -27,13 +28,13 @@ public class ShopEdit implements CommandExecutor {
 
     private MainShopGui mainShopGui;
 
-    public ShopEdit(ShopGUIEditor plugin, Shops shopList)
+    public ShopEdit(Plugin shopGUIPlugin, ShopGUIEditor plugin, Shops shopList)
     {
 
         shopPlugin =plugin;
         logger = plugin.getLogger();
 
-        mainShopGui = new MainShopGui(shopList,logger);
+        mainShopGui = new MainShopGui(shopGUIPlugin,shopList,logger);
     }
 
     @Override

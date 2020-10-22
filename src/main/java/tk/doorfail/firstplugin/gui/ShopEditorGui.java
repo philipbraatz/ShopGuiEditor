@@ -40,7 +40,7 @@ public class ShopEditorGui extends InventoryGui {
         if(line.length()!=0){
             shopColumns =line.length()-1;
             setup.add(String.format("%1$-9s", line));//.replace(' ', '0');'3        '
-            logger.warning("Fixing last row with '"+String.format("%1$-9s", line)+"' from length of "+shopColumns);
+            //logger.warning("Fixing last row with '"+String.format("%1$-9s", line)+"' from length of "+shopColumns);
         }
         shopRows = setup.size();
 
@@ -74,10 +74,10 @@ public class ShopEditorGui extends InventoryGui {
         gui.add(new StaticGuiElement('{',new ItemStack(Material.LAVA_BUCKET), click -> {
             //MainShopGui.shopList.shops.indexOf(shop);
             InventoryGui ig = new InventoryGui(ShopGUIEditor.getPlugin(ShopGUIEditor.class),null,
-                    "Are you sure you want to delete this shop: "+shop.name,
+                    "Are you sure you want to delete these items from "+shop.name,
                     new String[]{"y   n"},
                     new StaticGuiElement('y',new ItemStack(Material.EMERALD_BLOCK),click1 -> {
-                        MainShopGui.shopList.remove(MainShopGui.shopList.indexOf(shop));
+                        MainShopGui.shopList.get(MainShopGui.shopList.indexOf(shop)).items.clear();
                         click1.getEvent().getWhoClicked().closeInventory();
                         click.getEvent().getWhoClicked().closeInventory();
                         return true;
@@ -88,7 +88,7 @@ public class ShopEditorGui extends InventoryGui {
                     },"No"));
             ig.show(click.getEvent().getWhoClicked());
             return true;
-        },"Delete Item"));
+        },"Delete All Items"));
         gui.add(new StaticGuiElement('~', new ItemStack(Material.SAPLING), click -> {
             ShopItem newItem =new ShopItem(Material.AIR);
             shop.items.add(newItem);

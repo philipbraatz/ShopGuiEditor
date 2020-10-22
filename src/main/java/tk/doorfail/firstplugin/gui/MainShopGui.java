@@ -4,9 +4,11 @@ import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import tk.doorfail.firstplugin.ShopGUIEditor;
 import tk.doorfail.firstplugin.shopguiplus.Shop;
 import tk.doorfail.firstplugin.shopguiplus.Shops;
@@ -81,7 +83,11 @@ public class MainShopGui extends InventoryGui {
 
     private static Function getNextElement(Shop si){
         return (Function) -> {
-            ItemStack sItem = si.items.get(0).item.itemStack;
+            ItemStack sItem;
+            if(!si.items.isEmpty())
+                sItem = si.items.get(0).item.itemStack;
+            else
+                sItem = new ItemStack(Material.STAINED_GLASS_PANE,(short)3);
             sItem.setAmount(1);
             return new StaticGuiElement('(', sItem,
                     click -> {
@@ -89,13 +95,14 @@ public class MainShopGui extends InventoryGui {
                         ShopEditorGui.setLogger(logger);
                         ShopEditorGui editor = new ShopEditorGui(si,logger);
                         editor.show(click.getEvent().getWhoClicked());
+
                         return true;
                     },
                     si.name);
         };
     }
 
-    public MainShopGui(Shops _shopList, Logger logger) {
+    public MainShopGui(Plugin shopPlugin,Shops _shopList, Logger logger) {
         super(
                 ShopGUIEditor.getPlugin(ShopGUIEditor.class),
                 null,
@@ -105,6 +112,9 @@ public class MainShopGui extends InventoryGui {
         this.logger =logger;
         this.setCloseAction(close -> {
             shopyml.writeShops(shopList);
+            Bukkit.getPluginManager().disablePlugin(shopPlugin);
+            Bukkit.getPluginManager().enablePlugin(shopPlugin);
+            ShopGUIEditor.getPlugin(ShopGUIEditor.class).getLogger().info("Updated ShopGUIPlus shops");
             return true;
         });
         logger.info("Rows "+guiSetup(_shopList).size());
